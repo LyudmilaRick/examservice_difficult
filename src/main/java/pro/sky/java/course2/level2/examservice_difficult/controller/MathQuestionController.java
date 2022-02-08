@@ -41,7 +41,7 @@ public class MathQuestionController {
         return questionService.remove(item);
     }
 
-    @GetMapping()
+    @GetMapping
     public Collection<Question> getAll() {
         return questionService.getAll();
     }

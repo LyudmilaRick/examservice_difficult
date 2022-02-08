@@ -12,14 +12,14 @@ import java.util.*;
 
 @Repository("mathRepository")
 public class MathQuestionRepository implements QuestionRepository {
-    final Map<String, Question> examQuestion;
-    int count = 0;
+    private final Map<String, Question> examQuestion;
+    private int count = 0;
     /**
      * массив хэш значенийдля вопросов
      * простейшая проверка на дубликаты вопросов
      * отсечь варианты, отличающиеся знаками препинания
      */
-    protected Set<Integer> hashForChecking;
+    private Set<Integer> hashForChecking;
 
     public MathQuestionRepository() {
         this.examQuestion = new HashMap<>();
@@ -61,7 +61,10 @@ public class MathQuestionRepository implements QuestionRepository {
 
     @Override
     public Collection<Question> getAll() {
-        return Map.copyOf(examQuestion).values();
+        // @DisterRU не требуется делать копию мапы, только ее значений (объектов Question). Копировать ключи будет лишним.
+        // return Map.copyOf(examQuestion).values();
+        ArrayList<Question> value =  new ArrayList<>(examQuestion.values());
+        return (Collection<Question>) value.clone();
     }
 
     @Override

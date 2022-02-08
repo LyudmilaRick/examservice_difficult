@@ -1,5 +1,9 @@
 package pro.sky.java.course2.level2.examservice_difficult.service;
 
+import pro.sky.java.course2.level2.examservice_difficult.domain.Question;
+
+import java.util.Collection;
+
 /**
  * сервис студента
  * получить экзаменационные вопросы
@@ -7,6 +11,6 @@ package pro.sky.java.course2.level2.examservice_difficult.service;
  * не только из JavaQuestionService, но и из MathQuestionService
  */
 public interface ExaminerService {
-    Object getQuestion(int amount);
+    Collection<Question> getQuestion(int amount);
 }
 

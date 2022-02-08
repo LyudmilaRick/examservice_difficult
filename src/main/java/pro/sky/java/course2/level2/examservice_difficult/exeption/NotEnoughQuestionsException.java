@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+public class NotEnoughQuestionsException extends RuntimeException {
+    public NotEnoughQuestionsException(String message) {
         super(message);
 
     }
 
-    public BadRequestException() {
+    public NotEnoughQuestionsException() {
         super("Неверный запрос количества вопросов");
     }
 }

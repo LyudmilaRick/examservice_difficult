@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.level2.examservice_difficult.domain.Question;
-import pro.sky.java.course2.level2.examservice_difficult.exeption.BadRequestException;
+import pro.sky.java.course2.level2.examservice_difficult.exeption.NotEnoughQuestionsException;
 import pro.sky.java.course2.level2.examservice_difficult.service.ExaminerService;
 import pro.sky.java.course2.level2.examservice_difficult.service.QuestionService;
 
@@ -18,17 +18,19 @@ import java.util.*;
  */
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
+    private static final Logger log = LoggerFactory.getLogger(JavaQuestionService.class);
     private final QuestionService javaQuestionService;
     private final QuestionService mathQuestionService;
     private final Random random = new Random();
-    int countJava;
-    int countMath;
+    private int count;
 
     public ExaminerServiceImpl(
             @Qualifier("javaService") QuestionService javaQuestionService,
             @Qualifier("mathService") QuestionService mathQuestionService) {
         this.javaQuestionService = javaQuestionService;
         this.mathQuestionService = mathQuestionService;
+        count = javaQuestionService.getCount() + mathQuestionService.getCount();
+        log.info("count" + count);
     }
 
     /**
@@ -38,29 +40,24 @@ public class ExaminerServiceImpl implements ExaminerService {
 
     @Override
     public Collection<Question> getQuestion(int amount) {
-        countJava = javaQuestionService.getCount();
-        countMath = mathQuestionService.getCount();
-
         Set<Question> examCollection = new HashSet<>();
         if (checkAmount(amount)) {
-            throw new BadRequestException();
+            throw new NotEnoughQuestionsException();
         }
         while (examCollection.size() < amount) {
             // вернет 0 или 1
             int randomInt = random.nextInt(2);
-
-            switch (randomInt) {
-                case 0:
-                    examCollection.add(javaQuestionService.getRandomQuestion());
-                case 1:
-                    examCollection.add(mathQuestionService.getRandomQuestion());
+            if (randomInt == 0) {
+                examCollection.add(javaQuestionService.getRandomQuestion());
+            } else {
+                examCollection.add(mathQuestionService.getRandomQuestion());
             }
         }
         return examCollection;
     }
 
     protected boolean checkAmount(int amount) {
-        return amount == 0 || amount > countJava + countMath;
+        return amount == 0 || amount > count;
     }
 }
 

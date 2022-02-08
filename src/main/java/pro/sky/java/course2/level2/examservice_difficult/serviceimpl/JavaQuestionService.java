@@ -10,13 +10,14 @@ import pro.sky.java.course2.level2.examservice_difficult.exeption.QuestionNotExi
 import pro.sky.java.course2.level2.examservice_difficult.service.QuestionRepository;
 import pro.sky.java.course2.level2.examservice_difficult.service.QuestionService;
 
-import java.util.Collection;
+import java.util.*;
 
 @Service("javaService")
 public class JavaQuestionService implements QuestionService {
-    private static final Logger Log = LoggerFactory.getLogger(MathQuestionService.class);
+    private static final Logger log = LoggerFactory.getLogger(JavaQuestionService.class);
     private final QuestionRepository javaQuestionRepository;
-    int count = 0;
+    private int count = 0;
+    private Random random = new Random();
 
     public JavaQuestionService(@Qualifier("javaRepository") QuestionRepository javaQuestionRepository) {
         this.javaQuestionRepository = javaQuestionRepository;
@@ -50,20 +51,14 @@ public class JavaQuestionService implements QuestionService {
     @Override
     public Question getRandomQuestion() {
         count = getCount();
-        int index = 1; // итерации прохода по MAP
         int intRandom = getRandom(count); // случайное число
-        Log.info("intRandom" + intRandom);
-        for (Question item : javaQuestionRepository.getAll()) {
-            if (index == intRandom) {
-                return item;
-            }
-            index += 1;
-        }
-        throw new QuestionNotExistException();
+        return javaQuestionRepository.getAll().stream()
+                .skip(intRandom - 1)
+                .findFirst()
+                .orElseThrow(() -> new QuestionNotExistException());
     }
 
     private int getRandom(int count) {
-        java.util.Random random = new java.util.Random();
         int min = 1;
         return random.nextInt(count) + min;
     }

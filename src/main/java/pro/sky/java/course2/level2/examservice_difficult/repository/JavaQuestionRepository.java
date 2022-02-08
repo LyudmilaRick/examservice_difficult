@@ -11,14 +11,14 @@ import java.util.*;
 
 @Repository("javaRepository")
 public class JavaQuestionRepository implements QuestionRepository {
-    final Map<String, Question> examQuestion;
-    int count = 0;
+    private final Map<String, Question> examQuestion;
+    private int count = 0;
     /**
      * массив хэш значенийдля вопросов
      * простейшая проверка на дубликаты вопросов
      * отсечь варианты, отличающиеся знаками препинания
      */
-    protected Set<Integer> hashForChecking;
+    private Set<Integer> hashForChecking;
 
     public JavaQuestionRepository() {
         this.examQuestion = new HashMap<>();
@@ -62,7 +62,8 @@ public class JavaQuestionRepository implements QuestionRepository {
 
     @Override
     public Collection<Question> getAll() {
-        return Map.copyOf(examQuestion).values();
+        ArrayList<Question> value = new ArrayList<>(examQuestion.values());
+        return (Collection<Question>) value.clone();
     }
 
     @Override

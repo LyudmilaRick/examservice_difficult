@@ -14,10 +14,10 @@ import java.util.Random;
 
 @Service("mathService")
 public class MathQuestionService implements QuestionService {
-    private static final Logger Log = LoggerFactory.getLogger(MathQuestionService.class);
+    private static final Logger log = LoggerFactory.getLogger(MathQuestionService.class);
     private final QuestionRepository mathQuestionRepository;
-    private Random random = new Random();
-    int count = 0;
+    private final Random random = new Random();
+    private int count = 0;
 
     public MathQuestionService(@Qualifier("mathRepository") QuestionRepository javaQuestionRepository) {
         this.mathQuestionRepository = javaQuestionRepository;
@@ -53,7 +53,7 @@ public class MathQuestionService implements QuestionService {
         count = getCount();
         int index = 1; // итерации прохода по MAP
         int intRandom = getRandom(count); // случайное число
-        Log.info("intRandom" + intRandom);
+        log.info("intRandom" + intRandom);
         for (Question item : mathQuestionRepository.getAll()) {
             if (index == intRandom) {
                 return item;
@@ -64,7 +64,6 @@ public class MathQuestionService implements QuestionService {
     }
 
     private int getRandom(int count) {
-        java.util.Random random = new java.util.Random();
         int min = 1;
         return random.nextInt(count) + min;
     }
